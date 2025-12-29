@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "GlucoView"
+rootProject.name = "glucoview-app"
 include(":app")
 include(":watch")
 include(":common")
