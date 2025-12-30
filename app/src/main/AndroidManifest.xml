@@ -27,6 +27,11 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name="com.google.firebase.provider.FirebaseInitProvider"
+            android:authorities="${applicationId}.firebaseinitprovider"
+            tools:node="remove" />
+
         <service
             android:name=".core.service.FirebaseMessageListenerService"
             android:exported="false">

@@ -2,6 +2,7 @@ package com.ruiniles.glucoview.core.service
 
 import android.util.Log
 import androidx.datastore.preferences.core.edit
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.ruiniles.glucoview.common.datastore.PreferencesKey.LAST_READING
@@ -21,6 +22,7 @@ class FirebaseMessageListenerService : FirebaseMessagingService() {
     override fun onNewToken(token: String) =
         super.onNewToken(token)
             .also { Log.d("FirebaseMessageListenerService", "New Token: $token") }
+            .also { subscribe() }
 
     override fun onMessageReceived(message: RemoteMessage): Unit = runCatching {
         Json.decodeFromString<BgReading>(message.data.getValue("bgReading"))
@@ -40,6 +42,25 @@ class FirebaseMessageListenerService : FirebaseMessagingService() {
             .let {
                 Log.d("FirebaseMessageListenerService", it)
                 log(it)
+            }
+    }
+
+    private fun subscribe() {
+        Log.d(
+            "FirebaseMessageListenerService",
+            "Attempting to Subscribe to glucose-update-topic"
+        )
+
+        FirebaseMessaging.getInstance().subscribeToTopic("glucose-update-topic")
+            .addOnSuccessListener {
+                Log.d(
+                    "FirebaseMessageListenerService",
+                    "Successfully subscribed to glucose-update-topic"
+                )
+            }
+            .addOnFailureListener {
+                Log.d("FirebaseMessageListenerService", "Error subscribing, Retrying")
+                subscribe()
             }
     }
 }

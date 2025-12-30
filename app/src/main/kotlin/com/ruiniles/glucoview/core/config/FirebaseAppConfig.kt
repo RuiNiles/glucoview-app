@@ -3,7 +3,6 @@ package com.ruiniles.glucoview.core.config
 import android.content.Context
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
-import com.google.firebase.messaging.FirebaseMessaging
 import com.ruiniles.glucoview.common.datastore.PreferencesKey.API_KEY
 import com.ruiniles.glucoview.common.datastore.PreferencesKey.APP_ID
 import com.ruiniles.glucoview.common.datastore.PreferencesKey.PROJECT_ID
@@ -24,9 +23,6 @@ fun firebaseAppConfig(
             .setProjectId(it[PROJECT_ID]!!)
             .build()
 
-        return FirebaseApp.initializeApp(applicationContext, options).also {
-            FirebaseMessaging.getInstance().isAutoInitEnabled = true
-            FirebaseMessaging.getInstance().subscribeToTopic("glucose-update-topic")
-        }
+        return FirebaseApp.initializeApp(applicationContext, options)
     }
 }
